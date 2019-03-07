@@ -1,0 +1,13 @@
+allot : 分配
+
+lab : 实验室预约
+
+load : 借出
+
+maintain : 维修
+
+purchase ： 购买
+
+reject ： 报销
+
+revert ：  
