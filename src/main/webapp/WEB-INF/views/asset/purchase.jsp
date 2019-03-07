@@ -76,6 +76,7 @@
 							<th style="text-align: center;">所在院系</th>
 							<th style="text-align: center;">总数量</th>
 							<th style="text-align: center;">生产商</th>
+							<th style="text-align: center;">申请状态</th>
 						</tr>
 					</thead>
 					<tbody id="tbody" style="text-align: center;">
@@ -85,10 +86,14 @@
 							<td>{{asset.deptName}}</td>
 							<td>{{asset.sumNum}}</td>
 							<td>{{asset.remark}}</td>
+							<td v-if="asset.state == 0">已保存</td>
+							<td v-if="asset.state == 1">审核中</td>
+							<td v-if="asset.state == -1">已拒绝</td>
+							<td v-if="asset.state == 2">审核完成</td>
 						</tr>
 					</tbody>
 					<tbody id="noData" style="display: none;">
-						<tr><td colspan="5" align="center">暂无相关数据</td></tr>
+						<tr><td colspan="6" align="center">暂无相关数据</td></tr>
 					</tbody>
 				</table>
 			</div>
@@ -156,9 +161,12 @@ function getData(data) {
 
 function searchAsset() {
 	
-	var userName = $("#name").val();
-	var level = $("#type  option:selected").val();
+	var name = $("#name").val();
+	var type = $("#type  option:selected").val();
 	var dept = $("#dept  option:selected").val();
+	var bgDate = $("#bgDate").val();
+	var edDate = $("#edDate").val();
+	
 	getData({userName:userName, level:level, deptId:dept});
 }
 
@@ -183,14 +191,6 @@ function initSearch() {
 		}
 	});
 }
-
-$(function() {
-	getData({});
-	initSearch();
-	$("#addNewAssetMore").on('click', function() {
-		layer.alert("正在新增当中");
-	});
-});
 </script>
 
 <div id="addNewAsset" style="display: none;">
@@ -221,54 +221,68 @@ $(function() {
 			    </div>
 			 </div>
 		</div>
-		<label>资产采购申请</label><hr/>
-		<div class="table-container" style="width: 90%; margin: 0 auto;">
-			<form class="layui-form" action="" id="userForm1" style="margin: 10px; margin-top: 20px;">
-				<div class="layui-form-item">
-				 	<div class="layui-inline">
-				   		<label class="layui-form-label">资产名称：</label>
-				   		<div class="layui-input-inline">
-				   			<input type="text" class="layui-input" name="name">
-				    	</div>
-				 	</div>
-				 	<div class="layui-inline">
-				   		<label class="layui-form-label">资产类型：</label>
-				   		<div class="layui-input-inline">
-					      	<select name="typeId" id="typeName">
-					   			<option value="">请选择类型</option>
-								<c:forEach var="type" items="${menu.types }">
-									<option value="${type.id }">${type.name }</option>
-								</c:forEach>
-							</select>
-				    	</div>
-				 	</div>
-				</div>
-				<div class="layui-form-item">
-				 	<div class="layui-inline">
-				   		<label class="layui-form-label">总数量：</label>
-				   		<div class="layui-input-inline">
-				   			<input type="text" class="layui-input" name="sunNum">
-				    	</div>
-				 	</div>
-				 	<div class="layui-inline">
-				   		<label class="layui-form-label">资产型号：</label>
-				   		<div class="layui-input-inline">
-				   			<input type="text" class="layui-input" name="descreption">
-				    	</div>
-				 	</div>
-				</div>			
-			  	<div class="layui-form-item layui-form-text">
-		    		<label class="layui-form-label">备注</label>
-		    		<div class="layui-input-block">
-		      			<textarea placeholder="请输入内容" class="layui-textarea" name="remark"></textarea>
-		    		</div>
-		  		</div>	
-			</form>
-		</div>
 	</form>
+	<label>资产采购申请</label><hr/>
+	<div class="table-container" style="width: 90%; margin: 0 auto;">
+		<form class="layui-form" action="" id="newAssetForm" style="margin: 10px; margin-top: 20px;">
+			<div class="layui-form-item">
+			 	<div class="layui-inline">
+			   		<label class="layui-form-label">资产名称：</label>
+			   		<div class="layui-input-inline">
+			   			<input type="text" class="layui-input" name="name">
+			    	</div>
+			 	</div>
+			 	<div class="layui-inline">
+			   		<label class="layui-form-label">资产类型：</label>
+			   		<div class="layui-input-inline">
+				      	<select name="typeId" id="typeName">
+				   			<option value="">请选择类型</option>
+							<c:forEach var="type" items="${menu.types }">
+								<option value="${type.id }">${type.name }</option>
+							</c:forEach>
+						</select>
+			    	</div>
+			 	</div>
+			</div>
+			<div class="layui-form-item">
+			 	<div class="layui-inline">
+			   		<label class="layui-form-label">总数量：</label>
+			   		<div class="layui-input-inline">
+			   			<input type="text" class="layui-input" name="sumNum">
+			    	</div>
+			 	</div>
+			 	<div class="layui-inline">
+			   		<label class="layui-form-label">资产型号：</label>
+			   		<div class="layui-input-inline">
+			   			<input type="text" class="layui-input" name="descreption">
+			    	</div>
+			 	</div>
+			</div>			
+			<div class="layui-form-item">
+				 <div class="layui-inline">
+				   	<label class="layui-form-label">所属院系 /部门：</label>
+				   	<div class="layui-input-inline">
+				      	<select name="deptId" id="deptName">
+				      		<option value="">请选择所属</option>
+	<!-- 			      		<option v-for="dept in depts" :value="dept.id">{{dept.name}}</option> -->
+							<c:forEach var="dept" items="${menu.depts }">
+								<option value="${dept.id }">${dept.name }</option>
+							</c:forEach>
+				      	</select>
+				    </div>
+				 </div>
+			</div>
+		  	<div class="layui-form-item layui-form-text">
+	    		<label class="layui-form-label">备注</label>
+	    		<div class="layui-input-block">
+	      			<input type="text" class="layui-input" name="remark" placeholder="请输入生产商">
+	    		</div>
+	  		</div>	
+		</form>
+	</div>
 	<div style="margin-left: 380px; margin-top: 20px;">
-		<button class="layui-btn layui-btn-warm layui-btn-radius" onclick="updateAsset(0)">&nbsp;保&nbsp;存&nbsp;</button>&nbsp;&nbsp;&nbsp;
-		<button class="layui-btn layui-btn-warm layui-btn-radius" onclick="updateAsset(1)">&nbsp;提&nbsp;交&nbsp;</button>&nbsp;&nbsp;&nbsp;
+		<button class="layui-btn layui-btn-warm layui-btn-radius" onclick="addNewAsset(0)">&nbsp;保&nbsp;存&nbsp;</button>&nbsp;&nbsp;&nbsp;
+		<button class="layui-btn layui-btn-warm layui-btn-radius" onclick="addNewAsset(1)">&nbsp;提&nbsp;交&nbsp;</button>&nbsp;&nbsp;&nbsp;
 	</div>
 </div>
 <script type="text/javascript">
@@ -302,10 +316,26 @@ function openAddAsset() {
     })
 }
 
-function updateAsset(state) {
+function addNewAsset(state) {
 	
-	
-	
+	debugger;
+	var data = $("#newAssetForm").serialize() + "&state=" + state + "&deptName=" + $("#deptName option:selected").text()+ "&typeName=" + $("#typeName option:selected").text();
+	$.ajax({
+		url : '${ctx }/assets',
+		type : 'POST',
+		data : data,
+		success : function(res) {
+			if(res.code == 0)
+				location.reload();
+			else
+				layer.alert(res.message);
+		}
+	});
 }
+
+$(function() {
+	getData({});
+	initSearch();
+});
 </script>
 </html>

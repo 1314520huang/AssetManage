@@ -220,7 +220,6 @@
 		      	<label class="layui-form-label">选择角色</label>
 			    <div class="layui-input-inline">
 				  	<select name="level" id="roleSelect">
-				  		<option value="">请选择角色</option>
 <!-- 				  		<option v-for="role in roles" :value="role.id">{{role.name}}</option> -->
 							<c:forEach var="role" items="${menu.roles }">
 								<option value="${role.id }">${role.name }</option>
@@ -232,7 +231,6 @@
 		      	<label class="layui-form-label">选择部门</label>
 			    <div class="layui-input-inline">
 				  	<select name="deptId" id="deptSelect">
-				  		<option value="">请选择学院</option>
 <!-- 				  		<option v-for="dept in depts" :value="dept.id">{{dept.name}}</option> -->
 						<c:forEach var="dept" items="${menu.depts }">
 							<option value="${dept.id }">${dept.name }</option>
@@ -361,7 +359,6 @@ function updateRole(id) {
 	            	  $("#addUser").hide();
 	           	},
 	           	success:function() {
-	           		$("#userForm").reset();
 	        		var index = layer.msg('正在加载菜单，请稍后', { icon: 16, shade: 0.01,shadeClose:false,time:5000});
 	           		vm2.roles = vm1.roles;
 	           		vm2.depts = vm1.depts;
@@ -431,6 +428,7 @@ function updateRole(id) {
 			var userId = $("#userId").val();
 			var role = $("#roleSelectDiv option:selected").val();
 			var roleName = $("#roleSelectDiv option:selected").text();
+			if(roleName == "请选择角色")	return false;
 			$.ajax({
 				url : '${ctx}/users/update', 
 				method : 'POST',
