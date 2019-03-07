@@ -12,3 +12,9 @@
   3.4 部门管理： 关于部门控制
 
 4. 报表管理模块
+
+
+运行环境：
+  使用的是SpringBoot + MyBatis，后端使用MySQL数据库，前端使用Layui + Vue.js。
+  运行环境是JDK8.0， Maven + eclipse。
+  
