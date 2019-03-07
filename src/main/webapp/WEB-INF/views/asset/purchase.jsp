@@ -200,7 +200,7 @@ $(function() {
 		 	<div class="layui-inline">
 			   	<label class="layui-form-label">录入人：</label>
 			   	<div class="layui-input-inline">
-			   		<input type="text" readonly="readonly" id="userNameLR" class="layui-input" value="${menu.user.userName }">
+			   		<input type="text" readonly="readonly" class="layui-input" value="${menu.user.userName }">
 			    </div>
 			 </div>
 			 <div class="layui-inline">
@@ -217,26 +217,58 @@ $(function() {
 			 <div class="layui-inline">
 			   	<label class="layui-form-label">学院：</label>
 			   	<div class="layui-input-inline">
-			   		<input type="text" readonly="readonly" id="userNameLR" class="layui-input" value="${menu.user.deptName }">
+			   		<input type="text" readonly="readonly" class="layui-input" value="${menu.user.deptName }">
 			    </div>
 			 </div>
 		</div>
 		<label>资产采购申请</label><hr/>
-		<div style="margin-left: 80px;">
-			<button class="layui-btn layui-btn-radius" id="addNewAssetMore">&nbsp;新&nbsp;增&nbsp;资&nbsp;产&nbsp;</button>&nbsp;&nbsp;&nbsp;	
-		</div>
-		<div class="table-container" style="width: 90%; margin: 0 auto; height: 500px; overflow:auto;">
-			<form class="layui-form" action="" id="userForm1" style="margin: 10px;">
+		<div class="table-container" style="width: 90%; margin: 0 auto;">
+			<form class="layui-form" action="" id="userForm1" style="margin: 10px; margin-top: 20px;">
 				<div class="layui-form-item">
-		
-		
+				 	<div class="layui-inline">
+				   		<label class="layui-form-label">资产名称：</label>
+				   		<div class="layui-input-inline">
+				   			<input type="text" class="layui-input" name="name">
+				    	</div>
+				 	</div>
+				 	<div class="layui-inline">
+				   		<label class="layui-form-label">资产类型：</label>
+				   		<div class="layui-input-inline">
+					      	<select name="typeId" id="typeName">
+					   			<option value="">请选择类型</option>
+								<c:forEach var="type" items="${menu.types }">
+									<option value="${type.id }">${type.name }</option>
+								</c:forEach>
+							</select>
+				    	</div>
+				 	</div>
 				</div>
+				<div class="layui-form-item">
+				 	<div class="layui-inline">
+				   		<label class="layui-form-label">总数量：</label>
+				   		<div class="layui-input-inline">
+				   			<input type="text" class="layui-input" name="sunNum">
+				    	</div>
+				 	</div>
+				 	<div class="layui-inline">
+				   		<label class="layui-form-label">资产型号：</label>
+				   		<div class="layui-input-inline">
+				   			<input type="text" class="layui-input" name="descreption">
+				    	</div>
+				 	</div>
+				</div>			
+			  	<div class="layui-form-item layui-form-text">
+		    		<label class="layui-form-label">备注</label>
+		    		<div class="layui-input-block">
+		      			<textarea placeholder="请输入内容" class="layui-textarea" name="remark"></textarea>
+		    		</div>
+		  		</div>	
 			</form>
 		</div>
 	</form>
-	<div style="margin-left: 80px; margin-top: 20px;">
-		<button class="layui-btn layui-btn-radius layui-btn-danger" onclick="updateAsset(0)">&nbsp;保&nbsp;存&nbsp;</button>&nbsp;&nbsp;&nbsp;
-		<button class="layui-btn layui-btn-radius layui-btn-danger" onclick="updateAsset(1)">&nbsp;提&nbsp;交&nbsp;</button>&nbsp;&nbsp;&nbsp;
+	<div style="margin-left: 380px; margin-top: 20px;">
+		<button class="layui-btn layui-btn-warm layui-btn-radius" onclick="updateAsset(0)">&nbsp;保&nbsp;存&nbsp;</button>&nbsp;&nbsp;&nbsp;
+		<button class="layui-btn layui-btn-warm layui-btn-radius" onclick="updateAsset(1)">&nbsp;提&nbsp;交&nbsp;</button>&nbsp;&nbsp;&nbsp;
 	</div>
 </div>
 <script type="text/javascript">

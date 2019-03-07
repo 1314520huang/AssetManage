@@ -305,7 +305,7 @@ function updateRole(id) {
 	</form>
   	<div class="layui-form-item">
 	   	<div class="layui-input-block">
-	    	<button class="layui-btn" lay-submit="" lay-filter="demo1" id="updateRoleBtn">修改权限</button>
+	    	<button class="layui-btn layui-btn-radius" lay-submit="" lay-filter="demo1" id="updateRoleBtn">修改权限</button>
 	   	</div>
 	</div>
 </div>
